@@ -165,13 +165,13 @@ function Index() {
             </div>
           </div>
 
-          <h1 className={`text-6xl sm:text-8xl md:text-9xl font-bold tracking-tighter leading-[0.85] mb-8 transition-all duration-1000 delay-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            <span className="block">Build.</span>
-            <span className="block bg-gradient-to-r from-foreground via-foreground/80 to-foreground/50 bg-clip-text text-transparent">Monetize.</span>
+          <h1 className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] mb-6 transition-all duration-1000 delay-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <span className="block mb-1">Build.</span>
+            <span className="block mb-1 bg-gradient-to-r from-foreground via-foreground/80 to-foreground/50 bg-clip-text text-transparent">Monetize.</span>
             <span className="block">Dominate.</span>
           </h1>
 
-          <p className={`text-muted-foreground text-lg sm:text-xl max-w-2xl mx-auto mb-12 leading-relaxed transition-all duration-1000 delay-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+          <p className={`text-muted-foreground text-base sm:text-lg max-w-lg mx-auto mb-10 leading-relaxed transition-all duration-1000 delay-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             Join AI Nova Club — an exclusive network of high-performing Instagram pages in AI, business, and luxury niches.
           </p>
 
