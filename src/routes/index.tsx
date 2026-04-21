@@ -98,11 +98,13 @@ function Index() {
               { value: "50+", label: "Pages" },
               { value: "1M+", label: "Reach" },
               { value: "500K+", label: "Followers" },
-            ].map((s) => (
-              <div key={s.label} className="text-center">
-                <div className="text-3xl sm:text-5xl font-bold tracking-tight">{s.value}</div>
-                <div className="text-muted-foreground text-sm mt-2">{s.label}</div>
-              </div>
+            ].map((s, i) => (
+              <Section key={s.label} delay={i * 150}>
+                <div className="text-center">
+                  <div className="text-3xl sm:text-5xl font-bold tracking-tight">{s.value}</div>
+                  <div className="text-muted-foreground text-sm mt-2">{s.label}</div>
+                </div>
+              </Section>
             ))}
           </div>
         </Section>
@@ -120,8 +122,8 @@ function Index() {
             { title: "Monetization Opportunities", desc: "Multiple revenue streams — from sponsored posts to affiliate partnerships." },
             { title: "Private Network", desc: "Join a curated community of top-performing creators who share strategies and insights." },
             { title: "Growth Systems", desc: "Proven frameworks to scale your reach, engagement, and follower count consistently." },
-          ].map((c) => (
-            <Section key={c.title}>
+          ].map((c, i) => (
+            <Section key={c.title} delay={i * 120}>
               <div className="group p-8 rounded-2xl border border-border bg-card/50 backdrop-blur-sm hover:bg-accent/50 transition-all duration-300 hover:-translate-y-1">
                 <h3 className="text-lg font-semibold mb-3">{c.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{c.desc}</p>
@@ -141,8 +143,8 @@ function Index() {
             { step: "01", title: "Apply", desc: "Fill out a quick application to tell us about your page." },
             { step: "02", title: "Get Approved", desc: "Our team reviews your profile and welcomes qualified creators." },
             { step: "03", title: "Start Earning", desc: "Access brand deals, grow your page, and monetize your content." },
-          ].map((s) => (
-            <Section key={s.step}>
+          ].map((s, i) => (
+            <Section key={s.step} delay={i * 150}>
               <div className="text-center">
                 <div className="text-5xl font-bold text-muted-foreground/20 mb-4">{s.step}</div>
                 <h3 className="text-lg font-semibold mb-2">{s.title}</h3>
