@@ -13,28 +13,38 @@ export const Route = createFileRoute("/")({
 
 const JOTFORM_URL = "https://form.jotform.com/YOUR_FORM_ID";
 
-function useScrollReveal() {
+function useScrollReveal(delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold: 0.15 }
+      ([e]) => {
+        if (e.isIntersecting) {
+          if (delay > 0) {
+            setTimeout(() => setVisible(true), delay);
+          } else {
+            setVisible(true);
+          }
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.1 }
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, []);
+  }, [delay]);
   return { ref, visible };
 }
 
-function Section({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  const { ref, visible } = useScrollReveal();
+function Section({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  const { ref, visible } = useScrollReveal(delay);
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"} ${className}`}
+      className={`transition-all duration-1000 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"} ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
     </div>
