@@ -160,7 +160,7 @@ function Index() {
         <div className="relative text-center max-w-4xl mx-auto">
           <div className={`transition-all duration-1000 delay-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-card/30 backdrop-blur-sm mb-10">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: "oklch(0.7 0.18 145)" }} />
               <span className="text-xs tracking-[0.15em] uppercase text-muted-foreground">Now Accepting Applications</span>
             </div>
           </div>
