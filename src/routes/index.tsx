@@ -58,7 +58,8 @@ function Section({ children, className = "", delay = 0 }: { children: React.Reac
   return (
     <div
       ref={ref}
-      className={`transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${visible ? "opacity-100 translate-y-0 blur-0" : "opacity-0 translate-y-12 blur-[2px]"} ${className}`}
+      className={`transition-opacity duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"} ${className}`}
+      style={{ willChange: "opacity, transform", transform: "translateZ(0)", contain: "layout style paint" }}
     >
       {children}
     </div>

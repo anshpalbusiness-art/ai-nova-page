@@ -105,7 +105,30 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
+}
+
+/* GPU Acceleration for all animated elements */
+.will-change-transform {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* Containment for better performance */
+.contain-layout {
+  contain: layout style paint;
+}
+
+/* Content visibility for off-screen sections */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
 }
 
 @keyframes gradient-shift {
@@ -157,15 +180,21 @@
 }
 
 .animate-float-slow {
-  animation: float-slow 20s ease-in-out infinite;
+  animation: float-slow 25s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .animate-float-slow-reverse {
-  animation: float-slow-reverse 18s ease-in-out infinite;
+  animation: float-slow-reverse 22s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .animate-float-medium {
-  animation: float-medium 15s ease-in-out infinite;
+  animation: float-medium 20s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 @keyframes float-fast {
@@ -194,7 +223,8 @@
 }
 
 .animate-twinkle {
-  animation: twinkle 4s ease-in-out infinite;
+  animation: twinkle 5s ease-in-out infinite;
+  will-change: opacity, transform;
 }
 
 @keyframes line-drift {
@@ -205,5 +235,7 @@
 }
 
 .animate-line-drift {
-  animation: line-drift 20s linear infinite;
+  animation: line-drift 25s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
