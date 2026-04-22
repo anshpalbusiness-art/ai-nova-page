@@ -1,13 +1,1 @@
-{
-  "version": 2,
-  "rewrites": [
-    {
-      "source": "/thank-you",
-      "destination": "/"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/"
-    }
-  ]
-}
+{}
