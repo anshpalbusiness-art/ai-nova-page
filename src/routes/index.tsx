@@ -143,14 +143,24 @@ function Index() {
   }, []);
 
   useEffect(() => {
+    let rafId: number;
+    let pendingX = 50;
+    let pendingY = 50;
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
-      });
+      pendingX = (e.clientX / window.innerWidth) * 100;
+      pendingY = (e.clientY / window.innerHeight) * 100;
+      if (!rafId) {
+        rafId = requestAnimationFrame(() => {
+          setMousePosition({ x: pendingX, y: pendingY });
+          rafId = 0;
+        });
+      }
     };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
@@ -163,23 +173,15 @@ function Index() {
             background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(255,255,255,0.15) 0%, transparent 50%)`,
           }}
         />
-        {/* Large floating orbs */}
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-white/[0.06] blur-[150px] animate-float-slow" />
-        <div className="absolute bottom-[-30%] right-[-15%] w-[50%] h-[50%] rounded-full bg-white/[0.05] blur-[120px] animate-float-slow-reverse" />
-        <div className="absolute top-[40%] left-[60%] w-[30%] h-[30%] rounded-full bg-white/[0.04] blur-[100px] animate-float-medium" />
-        <div className="absolute top-[60%] right-[20%] w-[25%] h-[25%] rounded-full bg-white/[0.03] blur-[80px] animate-float-fast" />
-        <div className="absolute bottom-[20%] left-[30%] w-[20%] h-[20%] rounded-full bg-white/[0.04] blur-[60px] animate-pulse-slow" />
-        {/* Small particles */}
-        <div className="absolute top-[20%] left-[15%] w-1 h-1 rounded-full bg-white/30 animate-twinkle" />
-        <div className="absolute top-[35%] left-[80%] w-1.5 h-1.5 rounded-full bg-white/20 animate-twinkle" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-[70%] left-[25%] w-1 h-1 rounded-full bg-white/25 animate-twinkle" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-[45%] left-[45%] w-0.5 h-0.5 rounded-full bg-white/40 animate-twinkle" style={{ animationDelay: '0.5s' }} />
-        <div className="absolute top-[15%] left-[60%] w-1 h-1 rounded-full bg-white/20 animate-twinkle" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute top-[80%] left-[70%] w-1.5 h-1.5 rounded-full bg-white/30 animate-twinkle" style={{ animationDelay: '3s' }} />
-        {/* Subtle vertical lines */}
-        <div className="absolute left-[20%] top-0 w-px h-full bg-gradient-to-b from-transparent via-white/[0.03] to-transparent animate-line-drift" />
-        <div className="absolute left-[50%] top-0 w-px h-full bg-gradient-to-b from-transparent via-white/[0.02] to-transparent animate-line-drift" style={{ animationDelay: '2s' }} />
-        <div className="absolute left-[80%] top-0 w-px h-full bg-gradient-to-b from-transparent via-white/[0.03] to-transparent animate-line-drift" style={{ animationDelay: '4s' }} />
+        {/* Large floating orbs - optimized with will-change */}
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-white/[0.06] blur-[100px] animate-float-slow will-change-transform" />
+        <div className="absolute bottom-[-30%] right-[-15%] w-[50%] h-[50%] rounded-full bg-white/[0.05] blur-[80px] animate-float-slow-reverse will-change-transform" />
+        <div className="absolute top-[40%] left-[60%] w-[30%] h-[30%] rounded-full bg-white/[0.04] blur-[60px] animate-float-medium will-change-transform" />
+        {/* Small particles - reduced count */}
+        <div className="absolute top-[20%] left-[15%] w-1 h-1 rounded-full bg-white/30 animate-twinkle will-change-opacity" />
+        <div className="absolute top-[70%] left-[25%] w-1 h-1 rounded-full bg-white/25 animate-twinkle will-change-opacity" style={{ animationDelay: '2s' }} />
+        {/* Subtle vertical line - single optimized */}
+        <div className="absolute left-[50%] top-0 w-px h-full bg-gradient-to-b from-transparent via-white/[0.02] to-transparent animate-line-drift will-change-transform" />
       </div>
 
       {/* Navbar */}
