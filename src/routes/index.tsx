@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { Zap, TrendingUp, Users, Rocket, Shield, Crown, ArrowRight, Star, ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -11,7 +12,21 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const JOTFORM_URL = "https://form.jotform.com/YOUR_FORM_ID";
+const JOTFORM_URL = "https://form.jotform.com/261095158651056";
+
+const benefits = [
+  { icon: Zap, title: "Instant Brand Deals", desc: "Direct access to paid collaborations with top brands in AI & tech niches" },
+  { icon: TrendingUp, title: "Revenue Systems", desc: "Proven monetization frameworks that convert followers to consistent income" },
+  { icon: Users, title: "Elite Network", desc: "Connect with top 1% creators sharing insider strategies daily" },
+  { icon: Rocket, title: "Growth Engine", desc: "Scale from 10K to 100K+ with battle-tested growth systems" },
+];
+
+const stats = [
+  { value: "50+", label: "Elite Pages", desc: "Curated network" },
+  { value: "2M+", label: "Monthly Reach", desc: "Organic impressions" },
+  { value: "$500K+", label: "Revenue Generated", desc: "For members" },
+  { value: "95%", label: "Success Rate", desc: "Approved members" },
+];
 
 function useScrollReveal(delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
@@ -30,7 +45,7 @@ function useScrollReveal(delay = 0) {
           obs.disconnect();
         }
       },
-      { threshold: 0.08 }
+      { threshold: 0.1 }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -43,9 +58,22 @@ function Section({ children, className = "", delay = 0 }: { children: React.Reac
   return (
     <div
       ref={ref}
-      className={`transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${visible ? "opacity-100 translate-y-0 blur-0" : "opacity-0 translate-y-10 blur-[2px]"} ${className}`}
+      className={`transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${visible ? "opacity-100 translate-y-0 blur-0" : "opacity-0 translate-y-12 blur-[2px]"} ${className}`}
     >
       {children}
+    </div>
+  );
+}
+
+function StaggerContainer({ children, className = "", staggerDelay = 100 }: { children: React.ReactNode; className?: string; staggerDelay?: number }) {
+  const childrenArray = React.Children.toArray(children);
+  return (
+    <div className={className}>
+      {childrenArray.map((child, i) => (
+        <div key={i} style={{ animationDelay: `${i * staggerDelay}ms` }} className="animate-fade-in-up">
+          {child}
+        </div>
+      ))}
     </div>
   );
 }
@@ -62,28 +90,43 @@ function useMouseGlow() {
   return { ref, handleMove };
 }
 
-function GlassCard({ icon, title, desc, delay }: { icon: string; title: string; desc: string; delay: number }) {
+function GlassCard({ icon: Icon, title, desc, delay }: { icon: React.ElementType; title: string; desc: string; delay: number }) {
   const { ref, handleMove } = useMouseGlow();
   return (
     <Section delay={delay}>
       <div
         ref={ref}
         onMouseMove={handleMove}
-        className="group relative p-8 lg:p-10 rounded-2xl border border-border bg-card/40 backdrop-blur-xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:border-foreground/15 h-full"
-        style={{
-          background: "linear-gradient(135deg, oklch(0.12 0 0 / 80%), oklch(0.08 0 0 / 60%))",
-        }}
+        className="group relative p-8 lg:p-10 rounded-3xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:border-white/20 h-full"
       >
         <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
           style={{
-            background: "radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%), oklch(1 0 0 / 4%), transparent 60%)",
+            background: "radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.08), transparent 50%)",
           }}
         />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/[0.03] rounded-full blur-2xl transform translate-x-10 -translate-y-10 group-hover:scale-150 transition-transform duration-700" />
         <div className="relative z-10">
-          <div className="text-4xl mb-6">{icon}</div>
-          <h3 className="text-xl font-semibold mb-3 tracking-tight">{title}</h3>
-          <p className="text-muted-foreground text-[15px] leading-relaxed">{desc}</p>
+          <div className="w-14 h-14 rounded-2xl bg-white/[0.06] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+            <Icon className="w-7 h-7 text-white/70" />
+          </div>
+          <h3 className="text-xl font-semibold mb-3 tracking-tight text-white">{title}</h3>
+          <p className="text-white/50 text-[15px] leading-relaxed">{desc}</p>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+function StatCard({ value, label, desc, delay }: { value: string; label: string; desc: string; delay: number }) {
+  return (
+    <Section delay={delay}>
+      <div className="relative h-full flex flex-col items-center justify-center p-8 rounded-3xl bg-white/[0.02] border border-white/[0.06] backdrop-blur-sm group hover:border-white/15 transition-all duration-500">
+        <div className="absolute inset-0 bg-white/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter text-white mb-3 leading-none">{value}</div>
+          <div className="text-white font-medium text-base mb-1">{label}</div>
+          <div className="text-white/40 text-sm">{desc}</div>
         </div>
       </div>
     </Section>
@@ -92,269 +135,287 @@ function GlassCard({ icon, title, desc, delay }: { icon: string; title: string; 
 
 function Index() {
   const [heroLoaded, setHeroLoaded] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  
   useEffect(() => {
     const t = setTimeout(() => setHeroLoaded(true), 100);
     return () => clearTimeout(t);
   }, []);
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100,
+      });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-screen bg-[#030305] text-white overflow-x-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0 overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-40"
+          style={{
+            background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(255,255,255,0.15) 0%, transparent 50%)`,
+          }}
+        />
+        {/* Large floating orbs */}
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-white/[0.06] blur-[150px] animate-float-slow" />
+        <div className="absolute bottom-[-30%] right-[-15%] w-[50%] h-[50%] rounded-full bg-white/[0.05] blur-[120px] animate-float-slow-reverse" />
+        <div className="absolute top-[40%] left-[60%] w-[30%] h-[30%] rounded-full bg-white/[0.04] blur-[100px] animate-float-medium" />
+        <div className="absolute top-[60%] right-[20%] w-[25%] h-[25%] rounded-full bg-white/[0.03] blur-[80px] animate-float-fast" />
+        <div className="absolute bottom-[20%] left-[30%] w-[20%] h-[20%] rounded-full bg-white/[0.04] blur-[60px] animate-pulse-slow" />
+        {/* Small particles */}
+        <div className="absolute top-[20%] left-[15%] w-1 h-1 rounded-full bg-white/30 animate-twinkle" />
+        <div className="absolute top-[35%] left-[80%] w-1.5 h-1.5 rounded-full bg-white/20 animate-twinkle" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-[70%] left-[25%] w-1 h-1 rounded-full bg-white/25 animate-twinkle" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-[45%] left-[45%] w-0.5 h-0.5 rounded-full bg-white/40 animate-twinkle" style={{ animationDelay: '0.5s' }} />
+        <div className="absolute top-[15%] left-[60%] w-1 h-1 rounded-full bg-white/20 animate-twinkle" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute top-[80%] left-[70%] w-1.5 h-1.5 rounded-full bg-white/30 animate-twinkle" style={{ animationDelay: '3s' }} />
+        {/* Subtle vertical lines */}
+        <div className="absolute left-[20%] top-0 w-px h-full bg-gradient-to-b from-transparent via-white/[0.03] to-transparent animate-line-drift" />
+        <div className="absolute left-[50%] top-0 w-px h-full bg-gradient-to-b from-transparent via-white/[0.02] to-transparent animate-line-drift" style={{ animationDelay: '2s' }} />
+        <div className="absolute left-[80%] top-0 w-px h-full bg-gradient-to-b from-transparent via-white/[0.03] to-transparent animate-line-drift" style={{ animationDelay: '4s' }} />
+      </div>
+
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 py-5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-foreground" />
-            <span className="text-base font-semibold tracking-tight">AI Nova Club</span>
-          </div>
-          <a
-            href={JOTFORM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm tracking-wide px-6 py-2.5 rounded-full border border-border hover:bg-foreground/5 transition-all duration-300"
-          >
-            Apply Now
-          </a>
-        </div>
-      </nav>
-
-      {/* Hero */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 sm:px-10">
-        {/* Animated gradient orbs */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div
-            className="absolute top-[-20%] left-[10%] w-[600px] h-[600px] rounded-full opacity-[0.07]"
-            style={{
-              background: "radial-gradient(circle, oklch(0.7 0.15 270), transparent 70%)",
-              animation: "gradient-shift 20s ease-in-out infinite",
-            }}
-          />
-          <div
-            className="absolute bottom-[-10%] right-[5%] w-[500px] h-[500px] rounded-full opacity-[0.05]"
-            style={{
-              background: "radial-gradient(circle, oklch(0.6 0.1 200), transparent 70%)",
-              animation: "gradient-shift 25s ease-in-out infinite reverse",
-            }}
-          />
-          <div
-            className="absolute top-[30%] right-[20%] w-[300px] h-[300px] rounded-full opacity-[0.04]"
-            style={{
-              background: "radial-gradient(circle, oklch(0.8 0.1 330), transparent 70%)",
-              animation: "gradient-shift 18s ease-in-out infinite 3s",
-            }}
-          />
-        </div>
-        {/* Grain */}
-        <div
-          className="absolute inset-0 opacity-[0.025] pointer-events-none"
-          style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }}
-        />
-        {/* Grid overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.02] pointer-events-none"
-          style={{
-            backgroundImage: "linear-gradient(oklch(1 0 0 / 5%) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 5%) 1px, transparent 1px)",
-            backgroundSize: "80px 80px",
-          }}
-        />
-
-        <div className="relative text-center max-w-5xl mx-auto px-4">
-          <div className={`transition-all duration-1000 delay-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-border bg-card/30 backdrop-blur-sm mb-12">
-              <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: "oklch(0.7 0.18 145)" }} />
-              <span className="text-sm tracking-[0.15em] uppercase text-muted-foreground">Now Accepting Applications</span>
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
             </div>
+            <span className="text-base font-semibold tracking-tight text-white">AI Nova Club</span>
           </div>
-
-          <h1 className={`text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter leading-[0.9] mb-8 transition-all duration-1000 delay-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            <span className="block mb-2">Build.</span>
-            <span className="block mb-2 bg-gradient-to-r from-foreground via-foreground/80 to-foreground/50 bg-clip-text text-transparent">Monetize.</span>
-            <span className="block">Dominate.</span>
-          </h1>
-
-          <p className={`text-muted-foreground text-lg sm:text-xl max-w-xl mx-auto mb-12 leading-relaxed transition-all duration-1000 delay-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            Join AI Nova Club — an exclusive network of high-performing Instagram pages in AI, business, and luxury niches.
-          </p>
-
-          <div className={`flex flex-col sm:flex-row items-center justify-center gap-5 transition-all duration-1000 delay-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+          <div className="flex items-center gap-4">
+            <a href="#benefits" className="hidden sm:block text-sm text-white/60 hover:text-white transition-colors duration-300">Benefits</a>
+            <a href="#stats" className="hidden sm:block text-sm text-white/60 hover:text-white transition-colors duration-300">Results</a>
             <a
               href={JOTFORM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center gap-2.5 px-10 py-4 bg-primary text-primary-foreground font-medium rounded-full text-base tracking-wide overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_oklch(1_0_0_/_15%)]"
-              style={{ animation: "glow-pulse 4s ease-in-out infinite" }}
+              className="text-sm font-medium tracking-wide px-6 py-2.5 rounded-full bg-white text-black hover:bg-white/90 transition-all duration-300"
             >
-              <span className="relative z-10">Apply Now</span>
-              <svg className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            </a>
-            <a href="#learn-more" className="text-base text-muted-foreground hover:text-foreground transition-colors duration-300 flex items-center gap-1.5">
-              Learn more
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+              Apply Now
             </a>
           </div>
         </div>
+      </nav>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2" style={{ animation: "float 3s ease-in-out infinite" }}>
-          <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/20 flex justify-center pt-2">
-            <div className="w-0.5 h-2.5 bg-muted-foreground/40 rounded-full animate-pulse" />
+      {/* Hero */}
+      <section className="relative min-h-screen flex items-center justify-center px-6 sm:px-10 pt-20">
+        <div className="relative z-10 text-center max-w-5xl mx-auto">
+          <div className={`transition-all duration-1000 delay-100 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] mb-8">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-20"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white/60"></span>
+              </span>
+              <span className="text-xs tracking-[0.12em] uppercase text-white/40">Now Accepting Applications</span>
+            </div>
+          </div>
+
+          <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] mb-6 transition-all duration-1000 delay-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+            <span className="text-white">Build.</span>{" "}
+            <span className="text-white">Monetize.</span>{" "}
+            <span className="text-white">Dominate.</span>
+          </h1>
+
+          <p className={`text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed transition-all duration-1000 delay-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+            Join the most exclusive network of high-performing Instagram pages in AI, business & luxury niches. Turn your audience into income.
+          </p>
+
+          <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-1000 delay-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+            <a
+              href={JOTFORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative inline-flex items-center gap-3 px-10 py-5 bg-white text-black font-semibold rounded-full text-base tracking-wide overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.15)]"
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                Apply Now
+                <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </span>
+              <div className="absolute inset-0 bg-white/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </a>
+            <a href="#benefits" className="text-base text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 px-6 py-5">
+              See benefits
+              <ChevronDown className="w-4 h-4" />
+            </a>
+          </div>
+
+          {/* Trust badges */}
+          <div className={`mt-16 flex flex-wrap items-center justify-center gap-8 transition-all duration-1000 delay-800 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+            {[
+              { icon: Shield, text: "Vetted Network" },
+              { icon: Crown, text: "Exclusive Access" },
+              { icon: Star, text: "5-Star Results" },
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-2 text-white/40 text-sm">
+                <item.icon className="w-4 h-4" />
+                <span>{item.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 rounded-full border border-white/10 flex justify-center pt-3">
+            <div className="w-1 h-2 bg-white/60 rounded-full animate-pulse" />
           </div>
         </div>
       </section>
 
-      {/* Social Proof */}
-      <section id="learn-more" className="py-32 sm:py-40 px-6 sm:px-10 relative">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      {/* Stats */}
+      <section id="stats" className="py-24 sm:py-32 px-6 sm:px-10 relative">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-white/[0.02] rounded-full blur-[120px] pointer-events-none animate-float-slow" />
         <Section>
-          <p className="text-center text-sm tracking-[0.25em] uppercase text-muted-foreground mb-16">Trusted by growing creators</p>
+          <div className="text-center mb-16">
+            <p className="text-sm tracking-[0.2em] uppercase text-white/40 mb-4">Proven Results</p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">Numbers That Matter</h2>
+          </div>
         </Section>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-12 sm:gap-8">
-          {[
-            { value: "50+", label: "Pages", sublabel: "In the network" },
-            { value: "1M+", label: "Reach", sublabel: "Combined monthly" },
-            { value: "500K+", label: "Followers", sublabel: "Total audience" },
-          ].map((s, i) => (
-            <Section key={s.label} delay={i * 200}>
-              <div className="text-center">
-                <div className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter bg-gradient-to-b from-foreground to-foreground/60 bg-clip-text text-transparent">{s.value}</div>
-                <div className="text-foreground text-base font-medium mt-4">{s.label}</div>
-                <div className="text-muted-foreground text-sm mt-1.5">{s.sublabel}</div>
-              </div>
-            </Section>
+        <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((s, i) => (
+            <StatCard key={s.label} value={s.value} label={s.label} desc={s.desc} delay={i * 150} />
           ))}
         </div>
       </section>
 
-      {/* Value Props */}
-      <section className="py-32 sm:py-40 px-6 sm:px-10 relative">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      {/* Benefits */}
+      <section id="benefits" className="py-24 sm:py-32 px-6 sm:px-10 relative">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/[0.015] rounded-full blur-[100px] pointer-events-none animate-float-medium" />
         <Section>
           <div className="text-center mb-16">
-            <p className="text-sm tracking-[0.25em] uppercase text-muted-foreground mb-5">Benefits</p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter mb-6">Why AI Nova Club?</h2>
-            <p className="text-muted-foreground text-lg sm:text-xl max-w-xl mx-auto leading-relaxed">Everything you need to turn your page into a revenue machine.</p>
+            <p className="text-sm tracking-[0.2em] uppercase text-white/40 mb-4">Why Join</p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4 text-white">Everything You Need to Scale</h2>
+            <p className="text-white/50 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">Turn your Instagram page into a revenue-generating machine with our proven system.</p>
           </div>
         </Section>
-        <div className="max-w-6xl mx-auto grid sm:grid-cols-2 gap-5 lg:gap-6">
-          <GlassCard icon="💼" title="Brand Deals Access" desc="Get connected with brands looking for creators in your niche. We source, negotiate, and bring deals directly to you." delay={0} />
-          <GlassCard icon="💰" title="Monetization Opportunities" desc="Multiple revenue streams — from sponsored posts and affiliate partnerships to exclusive paid promotions." delay={120} />
-          <GlassCard icon="🔗" title="Private Network" desc="Join a curated community of top-performing creators who share strategies, insights, and collaboration opportunities." delay={240} />
-          <GlassCard icon="📈" title="Growth Systems" desc="Proven frameworks and insider tactics to scale your reach, engagement, and follower count consistently." delay={360} />
+        <div className="max-w-6xl mx-auto grid sm:grid-cols-2 gap-6 lg:gap-8">
+          {benefits.map((b, i) => (
+            <GlassCard key={b.title} icon={b.icon} title={b.title} desc={b.desc} delay={i * 150} />
+          ))}
         </div>
       </section>
 
       {/* How It Works */}
-      <section className="py-32 sm:py-40 px-6 sm:px-10 relative">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      <section className="py-24 sm:py-32 px-6 sm:px-10 relative">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="absolute bottom-40 left-1/4 w-[400px] h-[400px] bg-white/[0.02] rounded-full blur-[80px] pointer-events-none animate-float-slow-reverse" />
         <Section>
           <div className="text-center mb-16">
-            <p className="text-sm tracking-[0.25em] uppercase text-muted-foreground mb-5">Process</p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter">How It Works</h2>
+            <p className="text-sm tracking-[0.2em] uppercase text-white/40 mb-4">Simple Process</p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">How to Join</h2>
           </div>
         </Section>
         <div className="max-w-5xl mx-auto relative">
-          {/* Connecting line */}
-          <div className="hidden sm:block absolute top-[52px] left-[16.66%] right-[16.66%] h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-          <div className="grid sm:grid-cols-3 gap-14 sm:gap-10">
-            {[
-              { step: "01", title: "Apply", desc: "Fill out a quick application to tell us about your page and goals." },
-              { step: "02", title: "Get Approved", desc: "Our team reviews your profile and welcomes qualified creators within 48 hours." },
-              { step: "03", title: "Start Earning", desc: "Access brand deals, grow your page, and start monetizing immediately." },
-            ].map((s, i) => (
-              <Section key={s.step} delay={i * 200}>
-                <div className="text-center relative">
-                  <div className="w-14 h-14 rounded-full border border-border bg-card/60 backdrop-blur-sm flex items-center justify-center mx-auto mb-7 text-sm font-mono text-muted-foreground">
-                    {s.step}
+          <div className="hidden sm:block absolute top-[32px] left-[16.66%] right-[16.66%] h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <Section>
+            <div className="grid sm:grid-cols-3 gap-12 sm:gap-8">
+              {[
+                { step: "01", title: "Apply", desc: "Fill out our quick application. Tell us about your page & goals.", icon: "🚀" },
+                { step: "02", title: "Get Approved", desc: "Our team reviews & welcomes qualified creators within 48 hours.", icon: "✓" },
+                { step: "03", title: "Start Earning", desc: "Access brand deals, growth strategies & monetize immediately.", icon: "💎" },
+              ].map((s, i) => (
+                <div key={s.step} className="text-center relative group" style={{ animationDelay: `${i * 200}ms` }}>
+                  <div className="w-16 h-16 rounded-2xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center mx-auto mb-6 text-2xl group-hover:scale-110 transition-transform duration-500">
+                    {s.icon}
                   </div>
-                  <h3 className="text-xl font-semibold mb-3 tracking-tight">{s.title}</h3>
-                  <p className="text-muted-foreground text-[15px] leading-relaxed max-w-[260px] mx-auto">{s.desc}</p>
+                  <div className="text-white/40 text-xs font-mono mb-3">{s.step}</div>
+                  <h3 className="text-xl font-semibold mb-3 tracking-tight text-white">{s.title}</h3>
+                  <p className="text-white/50 text-[15px] leading-relaxed max-w-[260px] mx-auto">{s.desc}</p>
                 </div>
-              </Section>
-            ))}
-          </div>
+              ))}
+            </div>
+          </Section>
         </div>
       </section>
 
       {/* Exclusivity */}
-      <section className="py-32 sm:py-40 px-6 sm:px-10 relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            background: "radial-gradient(ellipse at center, oklch(0.7 0.15 270), transparent 60%)",
-          }}
-        />
+      <section className="py-24 sm:py-32 px-6 sm:px-10 relative overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/[0.015] rounded-full blur-[120px] pointer-events-none animate-float-slow" />
         <Section>
           <div className="max-w-3xl mx-auto text-center relative z-10">
-            <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-border bg-card/30 backdrop-blur-sm mb-10">
-              <span className="text-sm tracking-[0.15em] uppercase text-muted-foreground">Exclusive Access</span>
+            <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-sm mb-10">
+              <Crown className="w-4 h-4 text-white/60" />
+              <span className="text-sm tracking-[0.15em] uppercase text-white/50">Exclusive Access</span>
             </div>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter mb-7">
-              Not everyone<br />gets in.
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter mb-7 text-white">
+              Not everyone<br /><span className="text-white/80">gets in.</span>
             </h2>
-            <p className="text-muted-foreground text-lg sm:text-xl max-w-lg mx-auto leading-relaxed mb-12">
+            <p className="text-white/50 text-lg sm:text-xl max-w-lg mx-auto leading-relaxed mb-12">
               We maintain a high standard. Every member is vetted to ensure quality, commitment, and mutual growth for the entire network.
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-[15px] text-muted-foreground">
-              <div className="flex items-center gap-2.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-foreground/40" />
-                <span>Curated Members</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-foreground/40" />
-                <span>Quality Control</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-foreground/40" />
-                <span>Vetted Creators</span>
-              </div>
+            <div className="flex flex-wrap items-center justify-center gap-8 text-[15px]">
+              {[
+                { text: "Curated Members", color: "bg-white" },
+                { text: "Quality Control", color: "bg-white" },
+                { text: "Vetted Creators", color: "bg-white" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2.5 text-white/40">
+                  <div className={`w-1.5 h-1.5 rounded-full ${item.color}/40`} />
+                  <span>{item.text}</span>
+                </div>
+              ))}
             </div>
           </div>
         </Section>
       </section>
 
       {/* Final CTA */}
-      <section className="py-36 sm:py-48 px-6 sm:px-10 relative">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-        <div className="absolute inset-0 overflow-hidden">
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-[0.04]"
-            style={{ background: "radial-gradient(circle, oklch(0.7 0.15 270), transparent 60%)" }}
-          />
+      <section className="py-24 sm:py-36 px-6 sm:px-10 relative">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/[0.02] rounded-full blur-[100px] animate-float-slow" />
         </div>
         <Section>
           <div className="text-center relative z-10">
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter mb-7">Ready to Join?</h2>
-            <p className="text-muted-foreground text-lg sm:text-xl mb-12 max-w-lg mx-auto leading-relaxed">Your next chapter starts with one application.</p>
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter mb-7 text-white">Ready to Transform?</h2>
+            <p className="text-white/50 text-lg sm:text-xl mb-12 max-w-lg mx-auto leading-relaxed">Your next chapter starts with one application. Join the elite network today.</p>
             <a
               href={JOTFORM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center gap-2.5 px-12 py-5 bg-primary text-primary-foreground font-medium rounded-full text-lg tracking-wide overflow-hidden transition-all duration-300 hover:shadow-[0_0_60px_oklch(1_0_0_/_20%)]"
-              style={{ animation: "glow-pulse 4s ease-in-out infinite" }}
+              className="group relative inline-flex items-center gap-3 px-12 py-5 bg-white text-black font-semibold rounded-full text-lg tracking-wide overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_0_50px_rgba(255,255,255,0.15)]"
             >
-              <span className="relative z-10">Apply Now</span>
-              <svg className="relative z-10 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              <span className="relative z-10 flex items-center gap-2">
+                Apply Now
+                <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </span>
             </a>
+            <p className="mt-6 text-white/30 text-sm">Limited spots available for this cohort</p>
           </div>
         </Section>
       </section>
 
       {/* Footer */}
       <footer className="relative py-16 px-6 sm:px-10">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8">
-            <div className="flex items-center gap-2.5">
-              <div className="w-2.5 h-2.5 rounded-full bg-foreground" />
-              <span className="text-base font-semibold tracking-tight">AI Nova Club</span>
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="w-2.5 h-2.5 rounded-full bg-white/40" />
+              </div>
+              <span className="text-base font-semibold tracking-tight text-white">AI Nova Club</span>
             </div>
-            <div className="flex items-center gap-8 text-sm text-muted-foreground">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors duration-300 flex items-center gap-2">
+            <div className="flex items-center gap-8 text-sm text-white/40">
+              <a href="https://www.instagram.com/ainovaclub.network/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300 flex items-center gap-2">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
                 Instagram
               </a>
             </div>
           </div>
-          <div className="text-center text-sm text-muted-foreground/60">
+          <div className="text-center text-sm text-white/20">
             © {new Date().getFullYear()} AI Nova Club. All rights reserved.
           </div>
         </div>
