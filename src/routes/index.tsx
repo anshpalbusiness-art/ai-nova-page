@@ -12,8 +12,6 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const JOTFORM_URL = "https://form.jotform.com/261095158651056";
-
 const benefits = [
   { icon: Zap, title: "Instant Brand Deals", desc: "Direct access to paid collaborations with top brands in AI & tech niches" },
   { icon: TrendingUp, title: "Revenue Systems", desc: "Proven monetization frameworks that convert followers to consistent income" },
@@ -198,9 +196,7 @@ function Index() {
             <a href="#benefits" className="hidden sm:block text-sm text-white/60 hover:text-white transition-colors duration-300">Benefits</a>
             <a href="#stats" className="hidden sm:block text-sm text-white/60 hover:text-white transition-colors duration-300">Results</a>
             <a
-              href={JOTFORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/apply"
               className="text-sm font-medium tracking-wide px-6 py-2.5 rounded-full bg-white text-black hover:bg-white/90 transition-all duration-300"
             >
               Apply Now
@@ -234,9 +230,7 @@ function Index() {
 
           <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-1000 delay-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <a
-              href={JOTFORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/apply"
               className="group relative inline-flex items-center gap-3 px-10 py-5 bg-white text-black font-semibold rounded-full text-base tracking-wide overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.15)]"
             >
               <span className="relative z-10 flex items-center gap-2">
@@ -385,9 +379,7 @@ function Index() {
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter mb-7 text-white">Ready to Transform?</h2>
             <p className="text-white/50 text-lg sm:text-xl mb-12 max-w-lg mx-auto leading-relaxed">Your next chapter starts with one application. Join the elite network today.</p>
             <a
-              href={JOTFORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/apply"
               className="group relative inline-flex items-center gap-3 px-12 py-5 bg-white text-black font-semibold rounded-full text-lg tracking-wide overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_0_50px_rgba(255,255,255,0.15)]"
             >
               <span className="relative z-10 flex items-center gap-2">
